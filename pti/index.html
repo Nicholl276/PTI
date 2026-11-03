@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PTI by Nicho - Portal Pembelajaran UDINUS</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        udinus: { 50: '#eff6ff', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 900: '#1e3a8a' }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-blue-500/30">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight tracking-tight text-slate-900 dark:text-white">PTI by Nicho</h1>
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Pengantar Teknologi Informasi - UDINUS</span>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <!-- Tab Navigation -->
+                <nav class="hidden md:flex space-x-1 bg-slate-100 dark:bg-slate-700/50 p-1 rounded-xl">
+                    <button onclick="switchTab('materi')" id="tab-btn-materi" class="px-4 py-1.5 text-sm font-semibold rounded-lg transition-all bg-white dark:bg-slate-600 text-blue-600 dark:text-blue-400 shadow-sm">
+                        <i class="fa-solid fa-book-open mr-1.5"></i> Ringkasan Materi
+                    </button>
+                    <button onclick="switchTab('soal')" id="tab-btn-soal" class="px-4 py-1.5 text-sm font-semibold rounded-lg transition-all text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
+                        <i class="fa-solid fa-file-pen mr-1.5"></i> Latihan Soal & Pembahasan
+                    </button>
+                </nav>
+
+                <!-- Dark Mode Toggle -->
+                <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-yellow-400 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+                    <i id="theme-icon" class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Tab Bar -->
+        <div class="md:hidden flex border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+            <button onclick="switchTab('materi')" id="mobile-tab-materi" class="flex-1 py-3 text-center text-xs font-semibold border-b-2 border-blue-600 text-blue-600 dark:text-blue-400">
+                <i class="fa-solid fa-book-open block mb-1"></i> Materi
+            </button>
+            <button onclick="switchTab('soal')" id="mobile-tab-soal" class="flex-1 py-3 text-center text-xs font-semibold text-slate-500 dark:text-slate-400 border-b-2 border-transparent">
+                <i class="fa-solid fa-file-pen block mb-1"></i> Latihan Soal
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ================= TAB 1: MATERI ================= -->
+        <div id="section-materi" class="space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-bold">Ringkasan Materi PTI UDINUS</h2>
+                    <p class="text-blue-100 mt-2 text-sm sm:text-base max-w-2xl">
+                        Kumpulan rangkuman lengkap Pengantar Teknologi Informasi untuk mahasiswa UDINUS. Dilengkapi fitur pencarian instan, bookmark materi penting, dan catatan pribadi.
+                    </p>
+                </div>
+                <div class="relative w-full md:w-72">
+                    <i class="fa-solid fa-search absolute left-3.5 top-3.5 text-slate-400"></i>
+                    <input type="text" id="search-materi" oninput="filterMateri()" placeholder="Cari topik materi..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder-blue-200 text-sm focus:outline-none focus:ring-2 focus:ring-white/50">
+                </div>
+            </div>
+
+            <!-- Grid Materi -->
+            <div id="materi-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Content will be injected dynamically via JS -->
+            </div>
+        </div>
+
+        <!-- ================= TAB 2: SOAL & PEMBAHASAN ================= -->
+        <div id="section-soal" class="hidden space-y-6">
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-700 rounded-2xl p-6 sm:p-8 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-bold">Bank Soal & Latihan PTI (30 Soal)</h2>
+                    <p class="text-indigo-100 mt-2 text-sm sm:text-base max-w-2xl">
+                        Uji pemahamanmu dengan 30 soal pilihan ganda standar kuliah. Kesimpulan dan pembahasan mendalam akan langsung muncul seketika setelah kamu memilih jawaban pada setiap soal!
+                    </p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4 flex items-center space-x-6 min-w-[220px]">
+                    <div>
+                        <div class="text-xs text-indigo-200 font-medium">SKOR SEMENTARA</div>
+                        <div class="text-2xl font-black" id="score-display">0 / 30</div>
+                    </div>
+                    <button onclick="resetQuiz()" class="px-4 py-2 bg-white text-indigo-700 text-xs font-bold rounded-lg hover:bg-indigo-50 transition-colors shadow">
+                        <i class="fa-solid fa-rotate-right mr-1"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter Status Soal -->
+            <div class="flex flex-wrap gap-2 items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                <span class="text-xs font-bold text-slate-500 uppercase mr-2">Filter Soal:</span>
+                <button onclick="filterSoal('all')" id="filter-all" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white transition-all">Semua (30)</button>
+                <button onclick="filterSoal('unanswered')" id="filter-unanswered" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all">Belum Dijawab</button>
+                <button onclick="filterSoal('correct')" id="filter-correct" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all">Benar</button>
+                <button onclick="filterSoal('incorrect')" id="filter-incorrect" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all">Salah</button>
+            </div>
+
+            <!-- List Soal Container -->
+            <div id="soal-container" class="space-y-6">
+                <!-- Rendered dynamically -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal Detail Materi -->
+    <div id="materi-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 relative">
+            <button onclick="closeModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="modal-content" class="space-y-4">
+                <!-- Dynamic Modal Content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 py-6 text-center text-xs text-slate-500 dark:text-slate-400">
+        <p>PTI by Nicho &copy; 2026 &bull; Portal Pembelajaran & Latihan Soal Mahasiswa UDINUS</p>
+    </footer>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        // Data Materi Lengkap (12 Topik)
+        const materiData = [
+            {
+                id: 1,
+                title: "1. Internet & World Wide Web (WWW)",
+                icon: "fa-globe",
+                category: "Jaringan & Web",
+                desc: "Sejarah, arsitektur, layanan internet, URL, DNS, serta kriteria evaluasi informasi web.",
+                content: `
+                    <h3 class="text-xl font-bold text-blue-600 dark:text-blue-400">Konsep Dasar Internet & WWW</h3>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed">Internet adalah jaringan global komputer yang saling terhubung menggunakan standar protokol TCP/IP. Sementara World Wide Web (WWW) adalah kumpulan dokumen multimedia (halaman web) yang diakses melalui internet menggunakan protokol HTTP/HTTPS.</p>
+                    <h4 class="font-semibold text-slate-800 dark:text-white mt-4">Komponen Utama:</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-300">
+                        <li><strong>URL (Uniform Resource Locator):</strong> Alamat unik untuk mengakses resource di web.</li>
+                        <li><strong>DNS (Domain Name System):</strong> Menerjemahkan nama domain (misal: udinus.ac.id) ke alamat IP numerik.</li>
+                        <li><strong>Browser & Server:</strong> Client menampilkan halaman, server menyimpan dan memproses data web.</li>
+                    </ul>
+                    <h4 class="font-semibold text-slate-800 dark:text-white mt-4">4 Kriteria Evaluasi Informasi Web:</h4>
+                    <p class="text-slate-600 dark:text-slate-300">Relevance (Relevansi), Accuracy (Akurasi), Authority (Kredibilitas penulis/sumber), dan Currency (Kebaruan waktu publikasi).</p>
+                `
+            },
+            {
+                id: 2,
+                title: "2. Perangkat Lunak Aplikasi (Application Software)",
+                icon: "fa-window-maximize",
+                category: "Software",
+                desc: "Jenis perangkat lunak aplikasi bisnis, produktivitas, grafis, multimedia, serta open-source vs proprietary.",
+                content: `
+                    <h3 class="text-xl font-bold text-blue-600 dark:text-blue-400">Kategori Perangkat Lunak Aplikasi</h3>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed">Software aplikasi dirancang untuk membantu pengguna akhir (end-user) menyelesaikan tugas spesifik seperti mengolah kata, membuat presentasi, mengedit gambar, atau manajemen basis data.</p>
+                    <h4 class="font-semibold text-slate-800 dark:text-white mt-4">Jenis-Jenis Utama:</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-300">
+                        <li><strong>Packaged Software:</strong> Perangkat lunak komersial siap pakai (misal: Microsoft Office).</li>
+                        <li><strong>Custom Software:</strong> Dibangun khusus sesuai kebutuhan spesifik instansi atau perusahaan.</li>
+                        <li><strong>Open Source & Freeware:</strong> Bebas digunakan/dimodifikasi (Linux, VLC) atau gratis tanpa sumber kode (Adobe Reader).</li>
+                        <li><strong>Shareware:</strong> Model uji coba berbayar setelah masa trial berakhir.</li>
+                    </ul>
+                `
+            },
+            {
+                id: 3,
+                title: "3. Perangkat Input & Output (I/O Devices)",
+                icon: "fa-keyboard",
+                category: "Hardware",
+                desc: "Mekanisme kerja perangkat masukan (keyboard, scanner, biometrik) dan perangkat keluaran (monitor, printer, proyektor).",
+                content: `
+                    <h3 class="text-xl font-bold text-blue-600 dark:text-blue-400">Perangkat Input dan Output Komputer</h3>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed">Perangkat I/O adalah jembatan komunikasi antara pengguna manusia dengan sistem pemrosesan pusat (CPU).</p>
+                    <h4 class="font-semibold text-slate-800 dark:text-white mt-4">Perangkat Input:</h4>
+                    <p class="text-slate-600 dark:text-slate-300">Keyboard, mouse, touchpad, microphone, OCR scanner, dan sensor biometrik (sidik jari/retina).</p>
+                    <h4 class="font-semibold text-slate-800 dark:text-white mt-4">Perangkat Output:</h4>
+                    <p class="text-slate-600 dark:text-slate-300">Monitor (LED/OLED), Printer (Inkjet/Laser), Speaker, dan Proyektor.</p>
+                `
+            },
+            {
+                id: 4,
+                title: "4. Media Penyimpanan Data (Storage Devices)",
+                icon: "fa-hard-drive",
+                    category: "Hardware",
+                desc: "Perbandingan HDD, SSD, Flash Memory, Memory Card, Cloud Storage, dan teknologi optical disc.",
+                content: `
+                    <h3 class="text-xl font-bold text-blue-600 dark:text-blue-400">Teknologi Penyimpanan Data</h3>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed">Media penyimpanan berfungsi untuk menyimpan data secara permanen atau sementara agar dapat diakses kembali oleh sistem komputer.</p>
+                    <ul class="list-disc pl-5 space-y-2 text-slate-600 dark:text-slate-300 mt-3">
+                        <li><strong>HDD (Hard Disk Drive):</strong> Menggunakan piringan magnetik berputar, kapasitas besar harga ekonomis.</li>
+                        <li><strong>SSD (Solid State Drive):</strong> Berbasis chip flash memory NAND tanpa komponen gerak, kecepatan baca/tulis sangat tinggi.</li>
+                        <li><strong>Cloud Storage:</strong> Penyimpanan berbasis server jarak jauh melalui internet (Google Drive, Dropbox, OneDrive).</li>
+                        <li><strong>Optical Disc:</strong> CD, DVD, dan Blu-ray menggunakan teknologi pembacaan laser.</li>
+                    </ul>
+                `
+            },
+            {
+                id: 5,
+                title: "5. Sistem Operasi & Program Utility",
+                icon: "fa-gears",
+                category: "System",
+                desc: "Peran kernel, manajemen memori, proses, file system, serta utility keamanan dan disk maintenance.",
+                content: `
+                    <h3 class="text-xl font-bold text-blue-600 dark:text-blue-400">Sistem Operasi (OS) & Utility</h3>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed">Sistem Operasi adalah perangkat lunak sistem yang mengelola perangkat keras komputer, sumber daya perangkat lunak, dan menyediakan layanan umum untuk aplikasi.</p>
+                    <h4 class="font-semibold text-slate-800 dark:text-white mt-4">Fungsi Utama OS:</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-300">
+                        <li>Manajemen Proses & CPU Scheduling.</li>
+                        <li>Manajemen Memori Utama (RAM).</li>
+                        <li>File System Management (NTFS, EXT4, FAT32).</li>
+                        <li>Antarmuka Pengguna (CLI & GUI).</li>
+                    </ul>
+                    <h4 class="font-semibold text-slate-800 dark:text-white mt-4">Program Utility:</h4>
+                    <p class="text-slate-600 dark:text-slate-300">Antivirus, Disk Defragmenter, Backup Utility, dan File Compression.</p>
+                `
+            },
+            {
+                id: 6,
+                title: "6. Sistem Informasi & Keamanan Siber",
+                icon: "fa-shield-halved",
+                category: "Enterprise",
+                desc: "TPS, MIS, DSS, ESS, E-Commerce (B2B, B2C, C2C), Ancaman Siber, dan CIA Triad.",
+                content: `
+                    <h3 class="text-xl font-bold text-blue-600 dark:text-blue-400">Sistem Informasi & Keamanan</h3>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed">Sistem informasi mengintegrasikan hardware, software, data, prosedur, dan manusia untuk menghasilkan informasi yang berguna bagi organisasi.</p>
+                    <h4 class="font-semibold text-slate-800 dark:text-white mt-4">Tingkatan Sistem Informasi:</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-300">
+                        <li><strong>TPS (Transaction Processing System):</strong> Operasional harian (kasir, absensi).</li>
+                        <li><strong>MIS (Management Information System):</strong> Laporan rutin manajerial.</li>
+                        <li><strong>DSS (Decision Support System):</strong> Mendukung keputusan semi-terstruktur.</li>
+                        <li><strong>ESS (Executive Support System):</strong> Perencanaan strategis tingkat eksekutif.</li>
+                    </ul>
+                    <h4 class="font-semibold text-slate-800 dark:text-white mt-4">CIA Triad (Keamanan Informasi):</h4>
+                    <p class="text-slate-600 dark:text-slate-300">Confidentiality (Kerahasiaan), Integrity (Integritas), dan Availability (Ketersediaan).</p>
+                `
+            },
+            {
+                id: 7,
+                title: "7. Jaringan Komputer & Komunikasi Data",
+                icon: "fa-network-wired",
+                category: "Jaringan & Web",
+                desc: "Topologi jaringan (LAN, MAN, WAN), protokol TCP/IP, model OSI 7 layer, serta media transmisi.",
+                content: `
+                    <h3 class="text-xl font-bold text-blue-600 dark:text-blue-400">Jaringan Komputer & Komunikasi</h3>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed">Jaringan komputer adalah sekumpulan komputer yang saling terhubung untuk berbagi sumber daya, data, dan komunikasi.</p>
+                    <h4 class="font-semibold text-slate-800 dark:text-white mt-4">Cakupan Wilayah Jaringan:</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-300">
+                        <li><strong>PAN (Personal Area Network):</strong> Ruang lingkup pribadi (Bluetooth, TWS).</li>
+                        <li><strong>LAN (Local Area Network):</strong> Ruang lingkup gedung/kampus.</li>
+                        <li><strong>MAN (Metropolitan Area Network):</strong> Cakupan antar gedung dalam satu kota.</li>
+                        <li><strong>WAN (Wide Area Network):</strong> Jaringan global lintas negara (Internet).</li>
+                    </ul>
+                `
+            },
+            {
+                id: 8,
+                title: "8. Basis Data (Database Management Systems)",
+                icon: "fa-database",
+                category: "Enterprise",
+                desc: "Konsep ERD, Relational Database, SQL (DDL, DML), normalisasi, dan manajemen integritas data.",
+                content: `
+                    <h3 class="text-xl font-bold text-blue-600 dark:text-blue-400">Sistem Manajemen Basis Data (DBMS)</h3>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed">Basis data adalah kumpulan data terstruktur yang disimpan secara elektronik. DBMS adalah software untuk mengelola, membuat, dan memanipulasi database.</p>
+                    <h4 class="font-semibold text-slate-800 dark:text-white mt-4">Komponen Utama:</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-300">
+                        <li><strong>Entity-Relationship Diagram (ERD):</strong> Pemodelan konseptual relasi antar entitas.</li>
+                        <li><strong>SQL (Structured Query Language):</strong> Bahasa standar untuk query data (SELECT, INSERT, UPDATE, DELETE).</li>
+                        <li><strong>Normalisasi:</strong> Proses eliminasi redudansi data untuk menjaga konsistensi.</li>
+                    </ul>
+                `
+            },
+            {
+                id: 9,
+                title: "9. E-Commerce & E-Business",
+                icon: "fa-store",
+                category: "Enterprise",
+                desc: "Model bisnis digital B2B, B2C, C2C, sistem pembayaran digital, QRIS, dan keamanan transaksi online.",
+                content: `
+                    <h3 class="text-xl font-bold text-blue-600 dark:text-blue-400">E-Commerce & E-Business</h3>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed">E-commerce adalah transaksi jual beli barang atau jasa melalui media elektronik/internet, sedangkan E-business mencakup seluruh proses bisnis secara digital.</p>
+                    <h4 class="font-semibold text-slate-800 dark:text-white mt-4">Model Transaksi:</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-300">
+                        <li><strong>B2B (Business to Business):</strong> Transaksi antar perusahaan (misal: grosir pabrik ke supplier).</li>
+                        <li><strong>B2C (Business to Consumer):</strong> Perusahaan ke konsumen akhir (Tokopedia, Shopee).</li>
+                        <li><strong>C2C (Consumer to Consumer):</strong> Antar sesama konsumen (Olx, Marketplace bekas).</li>
+                    </ul>
+                `
+            },
+            {
+                id: 10,
+                title: "10. Etika, Hak Cipta, & Hukum Siber",
+                icon: "fa-scale-balanced",
+                category: "System",
+                desc: "Undang-Undang ITE, Hak Kekayaan Intelektual (HAKI), privasi data, plagiarisme, dan kejahatan siber.",
+                content: `
+                    <h3 class="text-xl font-bold text-blue-600 dark:text-blue-400">Etika Profesi & Hukum Siber</h3>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed">Perkembangan teknologi informasi menuntut kesadaran etika dan kepatuhan hukum agar tidak merugikan pihak lain di dunia digital.</p>
+                    <h4 class="font-semibold text-slate-800 dark:text-white mt-4">Poin Penting:</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-300">
+                        <li><strong>UU ITE:</strong> Regulasi hukum yang mengatur informasi serta transaksi elektronik di Indonesia.</li>
+                        <li><strong>Hak Cipta Software:</strong> Perlindungan hukum terhadap kepemilikan kode sumber dan karya intelektual.</li>
+                        <li><strong>Cybercrime:</strong> Phishing, carding, hacking, dan penyebaran hoaks/disinformasi.</li>
+                    </ul>
+                `
+            },
+            {
+                id: 11,
+                title: "11. Kecerdasan Buatan & Machine Learning",
+                icon: "fa-brain",
+                category: "Jaringan & Web",
+                desc: "Pengantar Artificial Intelligence, Deep Learning, Natural Language Processing, dan penerapan AI modern.",
+                content: `
+                    <h3 class="text-xl font-bold text-blue-600 dark:text-blue-400">Kecerdasan Buatan (AI)</h3>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed">Kecerdasan buatan adalah simulasi proses kecerdasan manusia oleh mesin, terutama sistem komputer, mencakup pembelajaran, penalaran, dan koreksi diri.</p>
+                    <h4 class="font-semibold text-slate-800 dark:text-white mt-4">Cabang Utama AI:</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-300">
+                        <li><strong>Machine Learning (ML):</strong> Komputer belajar dari data tanpa diprogram secara eksplisit.</li>
+                        <li><strong>Natural Language Processing (NLP):</strong> Pemrosesan bahasa alami oleh komputer (ChatGPT, Translate).</li>
+                        <li><strong>Computer Vision:</strong> Kemampuan komputer mengenali dan menganalisis visual/gambar.</li>
+                    </ul>
+                `
+            },
+            {
+                id: 12,
+                title: "12. Cloud Computing & DevOps",
+                icon: "fa-cloud",
+                category: "Software",
+                desc: "Layanan Cloud (IaaS, PaaS, SaaS), arsitektur serverless, serta otomatisasi deployment modern.",
+                content: `
+                    <h3 class="text-xl font-bold text-blue-600 dark:text-blue-400">Cloud Computing & Infrastruktur</h3>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed">Cloud computing adalah penyediaan layanan komputasi melalui internet—termasuk server, penyimpanan, basis data, jaringan, dan software.</p>
+                    <h4 class="font-semibold text-slate-800 dark:text-white mt-4">Model Layanan Cloud:</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-300">
+                        <li><strong>IaaS (Infrastructure as a Service):</strong> Penyediaan server virtual (AWS EC2, Google Compute Engine).</li>
+                        <li><strong>PaaS (Platform as a Service):</strong> Lingkungan siap pakai untuk developer (Vercel, Heroku).</li>
+                        <li><strong>SaaS (Software as a Service):</strong> Aplikasi siap pakai via browser (Gmail, Google Workspace).</li>
+                    </ul>
+                `
+            }
+        ];
+
+        // Bank Soal (30 Soal Penuh)
+        const soalData = [
+            { id: 1, question: "Jaringan komputer global yang saling terhubung menggunakan protokol standar TCP/IP disebut...", options: ["Intranet", "Internet", "Extranet", "Local Area Network"], answer: 1, explanation: "Internet adalah sistem global jaringan komputer yang saling terhubung secara internasional menggunakan standar suite protokol TCP/IP." },
+            { id: 2, question: "Sistem yang menerjemahkan nama domain web (seperti udinus.ac.id) menjadi alamat IP numerik adalah...", options: ["URL", "HTTP", "DNS", "ISP"], answer: 2, explanation: "DNS (Domain Name System) berfungsi layaknya buku telepon internet yang memetakan nama domain ke alamat IP server." },
+            { id: 3, question: "Manakah yang termasuk ke dalam 4 kriteria evaluasi informasi web yang kredibel?", options: ["Relevance & Authority", "Color & Design", "Speed & Storage", "Price & Popularity"], answer: 0, explanation: "Evaluasi web yang valid memerlukan tinjauan terhadap Relevance, Accuracy, Authority, dan Currency." },
+            { id: 4, question: "Perangkat lunak siap pakai yang dibeli secara komersial untuk kebutuhan umum pengguna disebut...", options: ["Custom Software", "Packaged Software", "Open Source", "Shareware"], answer: 1, explanation: "Packaged software adalah software komersial siap pakai yang diproduksi massal untuk berbagai pengguna umum." },
+            { id: 5, question: "Software yang menyediakan kode sumber secara terbuka agar dapat dimodifikasi oleh komunitas disebut...", options: ["Proprietary Software", "Open Source Software", "Freeware", "Shareware"], answer: 1, explanation: "Open Source memberikan kebebasan kepada pengguna untuk melihat, mengubah, dan mendistribusikan ulang kode sumber." },
+            { id: 6, question: "Perangkat keras input yang menggunakan sensor optik untuk mendeteksi pola sidik jari atau retina dikategorikan sebagai...", options: ["OCR Scanner", "Biometric Device", "Touchpad", "Barcode Reader"], answer: 1, explanation: "Sensor biometrik mengenali karakteristik fisik unik manusia seperti sidik jari, wajah, atau retina." },
+            { id: 7, question: "Media penyimpanan sekunder berbasis chip NAND Flash memory tanpa komponen mekanik yang berputar adalah...", options: ["HDD", "SSD", "Optical Disc", "Magnetic Tape"], answer: 1, explanation: "SSD (Solid State Drive) menggunakan chip semikonduktor memori flash sehingga akses data jauh lebih cepat daripada HDD." },
+            { id: 8, question: "Komponen inti dari sistem operasi yang bertanggung jawab mengelola sumber daya hardware dan proses adalah...", options: ["Kernel", "Utility Program", "Compiler", "Browser"], answer: 0, explanation: "Kernel adalah pusat dari sistem operasi yang bertindak sebagai jembatan utama antara aplikasi dan perangkat keras." },
+            { id: 9, question: "Sistem informasi yang dirancang untuk mendukung operasional harian transaksi bisnis rutin adalah...", options: ["MIS", "TPS", "DSS", "ESS"], answer: 1, explanation: "TPS (Transaction Processing System) mencatat dan memproses data transaksi harian organisasi seperti penjualan dan absensi." },
+            { id: 10, question: "Tiga pilar utama dalam konsep keamanan informasi yang dikenal sebagai CIA Triad adalah...", options: ["Confidentiality, Integrity, Availability", "Control, Internet, Access", "Connection, Interoperability, Architecture", "Computation, Information, Automation"], answer: 0, explanation: "CIA Triad terdiri dari Confidentiality (Kerahasiaan), Integrity (Integritas), dan Availability (Ketersediaan)." },
+            { id: 11, question: "Jaringan komputer yang mencakup area satu gedung atau kampus universitas disebut...", options: ["PAN", "LAN", "MAN", "WAN"], answer: 1, explanation: "LAN (Local Area Network) menghubungkan perangkat dalam cakupan area geografis terbatas seperti gedung, kantor, atau kampus." },
+            { id: 12, question: "Bahasa standar yang digunakan untuk mengelola, mengambil, dan memanipulasi data dalam basis data relasional adalah...", options: ["HTML", "CSS", "SQL", "Python"], answer: 2, explanation: "SQL (Structured Query Language) adalah bahasa standar pemrograman untuk berinteraksi dengan sistem basis data relasional (RDBMS)." },
+            { id: 13, question: "Model transaksi e-commerce yang melibatkan interaksi bisnis langsung kepada konsumen akhir (contoh: Tokopedia) disebut...", options: ["B2B", "B2C", "C2C", "B2G"], answer: 1, explanation: "B2C (Business to Consumer) adalah model bisnis di mana perusahaan menjual produk atau layanan langsung kepada konsumen." },
+            { id: 14, question: "Undang-undang di Indonesia yang mengatur segala bentuk aktivitas, informasi, dan transaksi elektronik adalah...", options: ["UU Hak Cipta", "UU ITE", "UU PDP", "UU Ketenagakerjaan"], answer: 1, explanation: "UU ITE (Informasi dan Transaksi Elektronik) adalah landasan hukum siber resmi di Indonesia." },
+            { id: 15, question: "Cabang kecerdasan buatan (AI) di mana komputer belajar secara otomatis dari pola data tanpa diprogram manual adalah...", options: ["Machine Learning", "Cloud Storage", "Virtual Reality", "Blockchain"], answer: 0, explanation: "Machine Learning memungkinkan sistem komputer meningkatkan performa tugasnya berdasarkan pengalaman data pelatihan." },
+            { id: 16, question: "Layanan cloud computing yang menyediakan infrastruktur server virtual mentah bagi developer adalah...", options: ["SaaS", "PaaS", "IaaS", "BaaS"], answer: 2, explanation: "IaaS (Infrastructure as a Service) menyediakan sumber daya komputasi dasar seperti mesin virtual, storage, dan jaringan." },
+            { id: 17, question: "Protokol standar keamanan yang mengenkripsi komunikasi data di web antara browser dan server ditandai dengan...", options: ["HTTP", "HTTPS", "FTP", "SMTP"], answer: 1, explanation: "HTTPS (HTTP Secure) menggunakan enkripsi SSL/TLS untuk mengamankan pertukaran data di web." },
+            { id: 18, question: "Program utility yang berfungsi untuk merapikan kembali susunan fragmen file di dalam hard disk agar performa meningkat adalah...", options: ["Antivirus", "Disk Defragmenter", "Firewall", "Compression Tool"], answer: 1, explanation: "Disk Defragmenter menata ulang sektor data di HDD mekanik untuk mempercepat waktu akses pembacaan." },
+            { id: 19, question: "Sistem informasi manajerial tingkat menengah yang bertugas menghasilkan laporan rutin berkala adalah...", options: ["TPS", "MIS", "DSS", "POS"], answer: 1, explanation: "MIS (Management Information System) menyediakan laporan rutin yang merangkum data operasional untuk manajer menengah." },
+            { id: 20, question: "Ancaman siber di mana pelaku menyamar sebagai institusi terpercaya melalui email palsu untuk mencuri data akun disebut...", options: ["Phishing", "DDoS", "Spam", "Malware"], answer: 0, explanation: "Phishing adalah teknik penipuan online untuk mengelabui korban agar menyerahkan informasi sensitif seperti password." },
+            { id: 21, question: "Topologi jaringan di mana seluruh perangkat terhubung langsung ke satu perangkat pusat seperti switch atau hub adalah...", options: ["Topologi Bus", "Topologi Ring", "Topologi Star", "Topologi Mesh"], answer: 2, explanation: "Topologi Star (Bintang) menempatkan satu central node sebagai pengatur lalu lintas data ke semua node lain." },
+            { id: 22, question: "Proses penghapusan redudansi data dalam perancangan basis data untuk menjaga konsistensi disebut...", options: ["Normalisasi", "Indexing", "Querying", "Parsing"], answer: 0, explanation: "Normalisasi adalah teknik perancangan database untuk memecah tabel dan menghilangkan duplikasi data yang tidak perlu." },
+            { id: 23, question: "Model e-commerce di mana transaksi jual beli terjadi antar sesama konsumen perorangan disebut...", options: ["B2B", "B2C", "C2C", "B2A"], answer: 2, explanation: "C2C (Consumer to Consumer) memfasilitasi transaksi langsung antar individu, seperti di situs iklan baris atau forum." },
+            { id: 24, question: "Teknologi pencarian dan pemrosesan bahasa manusia oleh komputer (seperti chatbot AI) dikenal sebagai...", options: ["NLP (Natural Language Processing)", "GUI", "BIOS", "API"], answer: 0, explanation: "NLP adalah cabang AI yang berfokus pada kemampuan komputer memahami, menganalisis, dan memproduksi bahasa manusia." },
+            { id: 25, question: "Layanan cloud computing yang langsung menyediakan aplikasi siap pakai bagi pengguna akhir melalui browser adalah...", options: ["IaaS", "PaaS", "SaaS", "DaaS"], answer: 2, explanation: "SaaS (Software as a Service) menyajikan aplikasi siap pakai (seperti Google Docs atau Gmail) tanpa perlu instalasi lokal." },
+            { id: 26, question: "Perangkat output visual yang menghasilkan cetakan di atas kertas menggunakan tinta cair adalah...", options: ["Laser Printer", "Inkjet Printer", "Dot Matrix", "Plotter"], answer: 1, explanation: "Inkjet printer menyemprotkan titik-titik mikroskopis tinta cair ke atas media kertas untuk mencetak teks atau gambar." },
+            { id: 27, question: "Sistem file bawaan modern yang umum digunakan pada sistem operasi Windows NT adalah...", options: ["FAT32", "NTFS", "EXT4", "SWAP"], answer: 1, explanation: "NTFS (New Technology File System) adalah file system standar modern Windows yang mendukung keamanan dan partisi besar." },
+            { id: 28, question: "Sistem pendukung keputusan (DSS) paling tepat digunakan untuk menghadapi masalah yang sifatnya...", options: ["Terstruktur", "Semi-terstruktur", "Rutinitas harian", "Otomatis penuh"], answer: 1, explanation: "DSS dirancang khusus membantu manajemen memecahkan masalah semi-terstruktur atau tidak terstruktur." },
+            { id: 29, question: "Tindakan memperbanyak atau mendistribusikan karya cipta pihak lain tanpa izin yang melanggar hukum disebut...", options: ["Plagiarisme / Pelanggaran Hak Cipta", "Open Source", "Public Domain", "Creative Commons"], answer: 0, explanation: "Pelanggaran hak cipta dan plagiarisme melanggar aspek etika profesional serta ketentuan perundang-undangan." },
+            { id: 30, question: "Alat pembayaran digital berbasis kode standar nasional Indonesia yang diinisiasi oleh Bank Indonesia adalah...", options: ["QRIS", "Transfer ATM", "Kartu Kredit", "PayPal"], answer: 0, explanation: "QRIS (Quick Response Code Indonesian Standard) menyatukan berbagai macam QR code dari berbagai penyelenggara jasa sistem pembayaran." }
+        ];
+
+        // User State Storage
+        let userAnswers = JSON.parse(localStorage.getItem('pti_user_answers')) || {};
+        let userBookmarks = JSON.parse(localStorage.getItem('pti_user_bookmarks')) || [];
+        let userNotes = JSON.parse(localStorage.getItem('pti_user_notes')) || {};
+        let currentFilter = 'all';
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check Dark Mode
+            if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-icon').className = 'fa-solid fa-sun';
+            }
+            renderMateri();
+            renderSoal();
+            updateScore();
+        });
+
+        // Toggle Dark Mode
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                icon.className = 'fa-solid fa-moon';
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                icon.className = 'fa-solid fa-sun';
+            }
+        }
+
+        // Tab Switching
+        function switchTab(tab) {
+            const secMateri = document.getElementById('section-materi');
+            const secSoal = document.getElementById('section-soal');
+            const btnMateri = document.getElementById('tab-btn-materi');
+            const btnSoal = document.getElementById('tab-btn-soal');
+            const mobMateri = document.getElementById('mobile-tab-materi');
+            const mobSoal = document.getElementById('mobile-tab-soal');
+
+            if (tab === 'materi') {
+                secMateri.classList.remove('hidden');
+                secSoal.classList.add('hidden');
+                btnMateri.className = "px-4 py-1.5 text-sm font-semibold rounded-lg transition-all bg-white dark:bg-slate-600 text-blue-600 dark:text-blue-400 shadow-sm";
+                btnSoal.className = "px-4 py-1.5 text-sm font-semibold rounded-lg transition-all text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white";
+                mobMateri.className = "flex-1 py-3 text-center text-xs font-semibold border-b-2 border-blue-600 text-blue-600 dark:text-blue-400";
+                mobSoal.className = "flex-1 py-3 text-center text-xs font-semibold text-slate-500 dark:text-slate-400 border-b-2 border-transparent";
+            } else {
+                secMateri.classList.add('hidden');
+                secSoal.classList.remove('hidden');
+                btnSoal.className = "px-4 py-1.5 text-sm font-semibold rounded-lg transition-all bg-white dark:bg-slate-600 text-blue-600 dark:text-blue-400 shadow-sm";
+                btnMateri.className = "px-4 py-1.5 text-sm font-semibold rounded-lg transition-all text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white";
+                mobSoal.className = "flex-1 py-3 text-center text-xs font-semibold border-b-2 border-blue-600 text-blue-600 dark:text-blue-400";
+                mobMateri.className = "flex-1 py-3 text-center text-xs font-semibold text-slate-500 dark:text-slate-400 border-b-2 border-transparent";
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Render Materi
+        function renderMateri(filter = '') {
+            const grid = document.getElementById('materi-grid');
+            grid.innerHTML = '';
+
+            const filtered = materiData.filter(m => 
+                m.title.toLowerCase().includes(filter.toLowerCase()) || 
+                m.desc.toLowerCase().includes(filter.toLowerCase()) ||
+                m.category.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400">Tidak ada materi yang sesuai dengan pencarian.</div>`;
+                return;
+            }
+
+            filtered.forEach(m => {
+                const isBookmarked = userBookmarks.includes(m.id);
+                const noteText = userNotes[m.id] || '';
+                
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 text-xs font-bold rounded-lg">${m.category}</span>
+                            <button onclick="toggleBookmark(${m.id})" class="text-lg ${isBookmarked ? 'text-rose-500' : 'text-slate-300 dark:text-slate-600'} hover:text-rose-600 transition-colors">
+                                <i class="${isBookmarked ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+                            </button>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-slate-700 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid ${m.icon}"></i>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-2">${m.title}</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">${m.desc}</p>
+                    </div>
+                    <div>
+                        <button onclick="openModal(${m.id})" class="w-full mb-4 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition-colors">
+                            <i class="fa-solid fa-book-open-reader mr-1.5"></i> Baca Materi & Ringkasan
+                        </button>
+                        <div class="border-t border-slate-100 dark:border-slate-700/60 pt-3">
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1">Catatan Pribadi:</label>
+                            <input type="text" value="${noteText}" onchange="saveNote(${m.id}, this.value)" placeholder="Tulis catatan di sini..." class="w-full text-xs px-3 py-1.5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterMateri() {
+            const query = document.getElementById('search-materi').value;
+            renderMateri(query);
+        }
+
+        function toggleBookmark(id) {
+            if (userBookmarks.includes(id)) {
+                userBookmarks = userBookmarks.filter(b => b !== id);
+            } else {
+                userBookmarks.push(id);
+            }
+            localStorage.setItem('pti_user_bookmarks', JSON.stringify(userBookmarks));
+            renderMateri(document.getElementById('search-materi').value);
+        }
+
+        function saveNote(id, text) {
+            userNotes[id] = text;
+            localStorage.setItem('pti_user_notes', JSON.stringify(userNotes));
+        }
+
+        // Modal Handling
+        function openModal(id) {
+            const m = materiData.find(item => item.id === id);
+            if (!m) return;
+            const container = document.getElementById('modal-content');
+            container.innerHTML = `
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center text-xl shadow-md">
+                        <i class="fa-solid ${m.icon}"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold text-blue-600 dark:text-blue-400">${m.category}</span>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-white">${m.title}</h2>
+                    </div>
+                </div>
+                <div class="space-y-4 pt-2 border-t border-slate-100 dark:border-slate-700">
+                    ${m.content}
+                </div>
+            `;
+            document.getElementById('materi-modal').classList.remove('hidden');
+            document.getElementById('materi-modal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('materi-modal').classList.remove('flex');
+            document.getElementById('materi-modal').classList.add('hidden');
+        }
+
+        // Render Soal Latihan & Pembahasan Instan Per Soal
+        function renderSoal() {
+            const container = document.getElementById('soal-container');
+            container.innerHTML = '';
+
+            const filteredSoal = soalData.filter(s => {
+                const userAns = userAnswers[s.id];
+                if (currentFilter === 'unanswered') return userAns === undefined;
+                if (currentFilter === 'correct') return userAns !== undefined && userAns === s.answer;
+                if (currentFilter === 'incorrect') return userAns !== undefined && userAns !== s.answer;
+                return true;
+            });
+
+            if (filteredSoal.length === 0) {
+                container.innerHTML = `<div class="text-center py-12 text-slate-400 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700">Tidak ada soal dalam filter ini.</div>`;
+                return;
+            }
+
+            filteredSoal.forEach((s, idx) => {
+                const userAns = userAnswers[s.id];
+                const isAnswered = userAns !== undefined;
+                const isCorrect = isAnswered && userAns === s.answer;
+
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4";
+                
+                let optionsHtml = '';
+                s.options.forEach((opt, optIdx) => {
+                    let btnClass = "w-full text-left p-3.5 rounded-xl text-sm font-medium border transition-all flex items-center justify-between ";
+                    
+                    if (!isAnswered) {
+                        btnClass += "border-slate-200 dark:border-slate-700 hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200";
+                    } else {
+                        if (optIdx === s.answer) {
+                            btnClass += "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-800 dark:text-emerald-300 font-semibold";
+                        } else if (optIdx === userAns && !isCorrect) {
+                            btnClass += "bg-rose-50 dark:bg-rose-950/40 border-rose-500 text-rose-800 dark:text-rose-300";
+                        } else {
+                            btnClass += "border-slate-200 dark:border-slate-700 opacity-50 text-slate-600 dark:text-slate-400";
+                        }
+                    }
+
+                    optionsHtml += `
+                        <button onclick="answerQuestion(${s.id}, ${optIdx})" ${isAnswered ? 'disabled' : ''} class="${btnClass}">
+                            <span><strong class="mr-2">${String.fromCharCode(65 + optIdx)}.</strong> ${opt}</span>
+                            ${isAnswered && optIdx === s.answer ? '<i class="fa-solid fa-circle-check text-emerald-600"></i>' : ''}
+                            ${isAnswered && optIdx === userAns && !isCorrect ? '<i class="fa-solid fa-circle-xmark text-rose-600"></i>' : ''}
+                        </button>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="flex items-start justify-between gap-4">
+                        <span class="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 text-xs font-bold rounded-lg">Soal #${s.id}</span>
+                        ${isAnswered ? (isCorrect ? '<span class="text-xs font-bold text-emerald-600 flex items-center"><i class="fa-solid fa-check mr-1"></i> Benar</span>' : '<span class="text-xs font-bold text-rose-600 flex items-center"><i class="fa-solid fa-xmark mr-1"></i> Salah</span>') : ''}
+                    </div>
+                    <h3 class="font-semibold text-base sm:text-lg text-slate-900 dark:text-white leading-snug">${s.question}</h3>
+                    <div class="space-y-2">
+                        ${optionsHtml}
+                    </div>
+                    ${isAnswered ? `
+                        <div class="mt-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 space-y-1.5 animate-fadeIn">
+                            <div class="flex items-center space-x-2 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                                <i class="fa-solid fa-circle-info text-blue-600"></i>
+                                <span>Kesimpulan & Pembahasan Per Soal</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">${s.explanation}</p>
+                        </div>
+                    ` : ''}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function answerQuestion(soalId, optionIdx) {
+            userAnswers[soalId] = optionIdx;
+            localStorage.setItem('pti_user_answers', JSON.stringify(userAnswers));
+            renderSoal();
+            updateScore();
+        }
+
+        function filterSoal(status) {
+            currentFilter = status;
+            ['all', 'unanswered', 'correct', 'incorrect'].forEach(s => {
+                const btn = document.getElementById(`filter-${s}`);
+                if (s === status) {
+                    btn.className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white transition-all";
+                } else {
+                    btn.className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition-all";
+                }
+            });
+            renderSoal();
+        }
+
+        function updateScore() {
+            let correctCount = 0;
+            soalData.forEach(s => {
+                if (userAnswers[s.id] !== undefined && userAnswers[s.id] === s.answer) {
+                    correctCount++;
+                }
+            });
+            document.getElementById('score-display').innerText = `${correctCount} / ${soalData.length}`;
+        }
+
+        function resetQuiz() {
+            if (confirm("Apakah kamu ingin mereset seluruh jawaban kuis?")) {
+                userAnswers = {};
+                localStorage.removeItem('pti_user_answers');
+                renderSoal();
+                updateScore();
+            }
+        }
+    </script>
+</body>
+</html>
